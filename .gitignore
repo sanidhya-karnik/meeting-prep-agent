@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.env
+
+# Node
+node_modules/
+package-lock.json
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Podman/Docker
+*.log
+
+# Data (keep structure, ignore large files)
+data/analytics/*.png
+data/documents/*.pdf
+data/documents/*.docx
+!data/analytics/chart_descriptions.json
+!data/documents/parsed_docs_cache.json

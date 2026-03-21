@@ -1,0 +1,121 @@
+version: "3.8"
+
+services:
+  # PostgreSQL for CRM data
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: crm
+      POSTGRES_USER: crm_user
+      POSTGRES_PASSWORD: crm_pass
+    volumes:
+      - ./data/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U crm_user -d crm"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - briefing-net
+
+  # Orchestrator - coordinates all agents
+  orchestrator:
+    build:
+      context: ./orchestrator
+      dockerfile: Containerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - LLM_URL=http://host.containers.internal:8080
+      - CRM_AGENT_URL=http://crm-agent:8001
+      - COMMS_AGENT_URL=http://comms-agent:8002
+      - DOCS_AGENT_URL=http://docs-agent:8003
+      - ANALYTICS_AGENT_URL=http://analytics-agent:8004
+    depends_on:
+      postgres:
+        condition: service_healthy
+      crm-agent:
+        condition: service_started
+      comms-agent:
+        condition: service_started
+      docs-agent:
+        condition: service_started
+      analytics-agent:
+        condition: service_started
+    networks:
+      - briefing-net
+
+  # CRM Agent - PostgreSQL queries
+  crm-agent:
+    build:
+      context: ./agents/crm
+      dockerfile: Containerfile
+    ports:
+      - "8001:8001"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=crm
+      - DB_USER=crm_user
+      - DB_PASS=crm_pass
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - briefing-net
+
+  # Communications Agent - Slack/email parsing
+  comms-agent:
+    build:
+      context: ./agents/email
+      dockerfile: Containerfile
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./data/slack:/app/data:ro
+    networks:
+      - briefing-net
+
+  # Docs Agent - PDF/DOCX parsing with Docling
+  docs-agent:
+    build:
+      context: ./agents/docs
+      dockerfile: Containerfile
+    ports:
+      - "8003:8003"
+    volumes:
+      - ./data/documents:/app/data:ro
+    networks:
+      - briefing-net
+
+  # Analytics Agent - Chart images and metrics
+  analytics-agent:
+    build:
+      context: ./agents/analytics
+      dockerfile: Containerfile
+    ports:
+      - "8004:8004"
+    volumes:
+      - ./data/analytics:/app/data:ro
+    networks:
+      - briefing-net
+
+  # UI - Streamlit interface
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Containerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - ORCHESTRATOR_URL=http://orchestrator:8000
+    depends_on:
+      - orchestrator
+    networks:
+      - briefing-net
+
+networks:
+  briefing-net:
+    driver: bridge

@@ -1,0 +1,64 @@
+{
+  "acme": {
+    "documents": [
+      {
+        "title": "Acme Corp - Enterprise Proposal v3",
+        "file_name": "Acme_Corp_Proposal_v3.pdf",
+        "type": "proposal",
+        "last_modified": "2026-03-15",
+        "num_pages": 2,
+        "summary": "3-year Enterprise Software License proposal for Acme Corp manufacturing operations. Total investment $450,000 ($150K/year) with 10% volume discount applied. Includes implementation services ($45K), training ($15K), and 24/7 premium support ($30K/year). Payment terms: Net 30. SLA: 99.9% uptime guarantee. Implementation timeline: 8-10 weeks from contract signing.",
+        "key_terms": [
+          "Contract Duration: 3 years",
+          "Total Value: $450,000 (discounted from $510,000)",
+          "Payment Terms: Net 30",
+          "SLA: 99.9% uptime guarantee",
+          "Support: 24/7 premium tier with 2-hour response",
+          "Implementation: 8-10 weeks",
+          "Data Residency: US-East (AWS us-east-1)"
+        ],
+        "pricing": {
+          "annual_license": "$120,000",
+          "implementation": "$45,000",
+          "training": "$15,000",
+          "premium_support": "$30,000/year"
+        }
+      },
+      {
+        "title": "Acme Corp - Meeting Notes (March 10)",
+        "file_name": "Acme_Meeting_Notes_2026-03-10.docx",
+        "type": "meeting_notes",
+        "last_modified": "2026-03-10",
+        "num_pages": 2,
+        "summary": "Technical deep-dive meeting with John Smith (VP Eng) and Mike Chen (IT Director). Covered SAP S/4HANA integration approach using REST APIs, security/compliance review (SOC 2, US data residency confirmed), and implementation timeline discussion. John emphasized Q2 go-live target. Phased rollout agreed: pilot with engineering team first.",
+        "attendees": ["John Smith", "Mike Chen", "Sarah Chen", "Tom Wilson"],
+        "decisions": [
+          "Will use REST API for ERP integration (not file-based)",
+          "Phased rollout: pilot with engineering team first",
+          "Weekly check-ins during implementation"
+        ],
+        "open_items": [
+          {
+            "item": "Confirm implementation timeline with delivery team",
+            "owner": "Sarah Chen",
+            "due": "Mar 18",
+            "status": "Pending"
+          },
+          {
+            "item": "Share API documentation with Mike",
+            "owner": "Tom Wilson",
+            "due": "Mar 12",
+            "status": "Done"
+          },
+          {
+            "item": "Schedule security review call with legal",
+            "owner": "Mike Chen",
+            "due": "Mar 20",
+            "status": "Pending"
+          }
+        ],
+        "next_meeting": "Q1 Review - March 22, 2026 with Lisa Park (CFO)"
+      }
+    ]
+  }
+}

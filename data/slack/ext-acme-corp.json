@@ -1,0 +1,108 @@
+{
+  "channel": {
+    "id": "C0123ACME",
+    "name": "ext-acme-corp",
+    "purpose": "External channel with Acme Corp team",
+    "created": 1704067200,
+    "members": ["U001_SARAH", "U002_TOM", "U003_JOHN", "U004_MIKE"]
+  },
+  "users": {
+    "U001_SARAH": {"name": "Sarah Chen", "email": "sarah.chen@ourcompany.com", "is_internal": true},
+    "U002_TOM": {"name": "Tom Wilson", "email": "tom.wilson@ourcompany.com", "is_internal": true},
+    "U003_JOHN": {"name": "John Smith", "email": "john.smith@acmecorp.com", "is_internal": false},
+    "U004_MIKE": {"name": "Mike Chen", "email": "mike.chen@acmecorp.com", "is_internal": false}
+  },
+  "messages": [
+    {
+      "ts": "1710936000.000100",
+      "user": "U003_JOHN",
+      "text": "Hey Sarah, quick heads up - Lisa (our CFO) is joining the Q1 review call on Friday. She's going to want to see the ROI numbers we discussed.",
+      "date": "2026-03-20T14:00:00Z"
+    },
+    {
+      "ts": "1710937800.000200",
+      "user": "U001_SARAH",
+      "text": "Thanks for the heads up John! I'll make sure to have the updated ROI projections ready. Should I send them over beforehand so she can review?",
+      "date": "2026-03-20T14:30:00Z"
+    },
+    {
+      "ts": "1710938400.000300",
+      "user": "U003_JOHN",
+      "text": "That would be great. If you can get them to me by Thursday EOD, I can forward to her with some context.",
+      "date": "2026-03-20T14:40:00Z"
+    },
+    {
+      "ts": "1710939000.000400",
+      "user": "U003_JOHN",
+      "text": "Also - any update on the implementation timeline? We're really trying to hit that Q2 go-live.",
+      "date": "2026-03-20T14:50:00Z"
+    },
+    {
+      "ts": "1710940800.000500",
+      "user": "U001_SARAH",
+      "text": "Checking with our delivery team today. Initial estimate is 8-10 weeks from contract signing. I'll confirm and include in the ROI deck.",
+      "date": "2026-03-20T15:20:00Z"
+    },
+    {
+      "ts": "1710842400.000600",
+      "user": "U004_MIKE",
+      "text": "Hey Tom - one question on the API docs you sent. Is the data residency guaranteed to be US-only? We have some compliance requirements.",
+      "date": "2026-03-19T12:00:00Z"
+    },
+    {
+      "ts": "1710846000.000700",
+      "user": "U002_TOM",
+      "text": "Yes, confirmed - all data will reside in our US-East region (AWS us-east-1). We can add this explicitly to the contract if that helps.",
+      "date": "2026-03-19T13:00:00Z"
+    },
+    {
+      "ts": "1710846600.000800",
+      "user": "U004_MIKE",
+      "text": ":+1: That works. I'll let legal know.",
+      "date": "2026-03-19T13:10:00Z",
+      "reactions": [{"name": "thumbsup", "users": ["U002_TOM"]}]
+    },
+    {
+      "ts": "1710680400.000900",
+      "user": "U003_JOHN",
+      "text": "FYI - TechRival came back with a lower quote. I want to go with you guys but I need to justify the price difference to Lisa. Can you help me build that case?",
+      "date": "2026-03-17T15:00:00Z"
+    },
+    {
+      "ts": "1710684000.001000",
+      "user": "U001_SARAH",
+      "text": "Absolutely. I'll put together a TCO comparison showing the full picture over 3 years. Our integration typically saves 40+ hours/month vs point solutions, plus our support SLA is 2 hours vs their 24-48.",
+      "date": "2026-03-17T16:00:00Z"
+    },
+    {
+      "ts": "1710684600.001100",
+      "user": "U003_JOHN",
+      "text": "Perfect. If you can get that to me before the Q1 review, I can share it with Lisa beforehand. That should help.",
+      "date": "2026-03-17T16:10:00Z"
+    },
+    {
+      "ts": "1710334800.001200",
+      "user": "U001_SARAH",
+      "text": "Great meeting today everyone! Sending over the revised proposal (v3) with the updated payment terms we discussed. Key changes:\n• Payment terms: Net 30 (changed from Net 15)\n• Added 99.9% SLA guarantee\n• Included 24/7 support tier",
+      "date": "2026-03-13T13:00:00Z"
+    },
+    {
+      "ts": "1710338400.001300",
+      "user": "U003_JOHN",
+      "text": "Got it, thanks Sarah. I'll review with Mike and get back to you by EOW.",
+      "date": "2026-03-13T14:00:00Z",
+      "reactions": [{"name": "eyes", "users": ["U001_SARAH"]}]
+    }
+  ],
+  "summary": {
+    "total_messages": 13,
+    "date_range": {"start": "2026-03-13", "end": "2026-03-20"},
+    "key_topics": ["ROI projections", "Q2 go-live timeline", "competitor pricing", "data residency"],
+    "pending_items": [
+      "Send ROI projections by Thursday EOD",
+      "Confirm implementation timeline",
+      "TCO comparison for Lisa"
+    ],
+    "sentiment": "positive"
+  }
+}

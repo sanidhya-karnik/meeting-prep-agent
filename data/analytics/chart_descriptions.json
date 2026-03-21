@@ -1,0 +1,9 @@
+{
+  "acme_usage_trend.png": "Platform usage shows strong growth over the past 6 months. Active users increased from 320 to 520 (+62.5% growth). Sessions grew proportionally from 4,200 to 7,100 per month. The trend is consistently upward with no dips, indicating healthy adoption and engagement.",
+
+  "acme_health_score.png": "Account health score is 85/100 (green zone). This indicates a healthy, engaged customer with low churn risk. The score reflects strong product usage, positive support interactions, and regular engagement with the platform.",
+
+  "acme_engagement_heatmap.png": "Feature engagement analysis shows Dashboard (95%) and Reports (88%) are the most-used features. Analytics usage is growing rapidly (45% to 70% over 4 weeks), suggesting increased data-driven decision making. Integrations (48%) and Admin (30%) have lower but stable usage. Key insight: The Analytics feature shows the strongest week-over-week growth.",
+
+  "acme_support_metrics.png": "Support metrics are excellent. Zero open tickets currently. Ticket volume has decreased from 8 in January to just 2 in March. Average first response time is 1.5 hours (SLA: 2 hours). Average resolution time is 4.2 hours (SLA: 8 hours). All metrics are well within SLA targets, indicating a satisfied customer with minimal support needs."
+}
