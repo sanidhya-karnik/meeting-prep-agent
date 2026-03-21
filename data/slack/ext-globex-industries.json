@@ -1,0 +1,59 @@
+{
+  "channel": {
+    "id": "C0456GLOBEX",
+    "name": "ext-globex-industries",
+    "purpose": "External channel with Globex Industries team",
+    "created": 1706227200,
+    "members": ["U001_SARAH", "U010_RACHEL", "U011_DAVID"]
+  },
+  "users": {
+    "U001_SARAH": {"name": "Sarah Chen", "email": "sarah.chen@ourcompany.com", "is_internal": true},
+    "U010_RACHEL": {"name": "Rachel Torres", "email": "rachel.torres@globex.com", "is_internal": false},
+    "U011_DAVID": {"name": "David Kim", "email": "david.kim@globex.com", "is_internal": false}
+  },
+  "messages": [
+    {
+      "ts": "1711004400.000100",
+      "user": "U010_RACHEL",
+      "text": "For the steering call next week, I need a crisp success plan for the pilot and the KPIs we will track at the two warehouses.",
+      "date": "2026-03-21T09:00:00Z"
+    },
+    {
+      "ts": "1711006200.000200",
+      "user": "U001_SARAH",
+      "text": "Perfect. I will send a one-page pilot success scorecard with baseline and target metrics before Friday EOD.",
+      "date": "2026-03-21T09:30:00Z"
+    },
+    {
+      "ts": "1710918000.000300",
+      "user": "U011_DAVID",
+      "text": "Security asked whether SSO and audit logs are included in the pilot scope. Can we confirm this before legal review?",
+      "date": "2026-03-20T09:00:00Z"
+    },
+    {
+      "ts": "1710919800.000400",
+      "user": "U001_SARAH",
+      "text": "Yes, both are included. I will include explicit language in the pilot proposal addendum and share by tomorrow.",
+      "date": "2026-03-20T09:30:00Z"
+    },
+    {
+      "ts": "1710752400.000500",
+      "user": "U010_RACHEL",
+      "text": "If pilot outcomes are solid, I can sponsor expansion in Q3. We need adoption metrics and time saved per site.",
+      "date": "2026-03-18T11:00:00Z"
+    }
+  ],
+  "summary": {
+    "account_name": "Globex Industries",
+    "external_opportunity_id": "OPP-GLOBEX-0001",
+    "deal_stage": "Engaging",
+    "total_messages": 5,
+    "date_range": {"start": "2026-03-18", "end": "2026-03-21"},
+    "key_topics": ["pilot success KPIs", "security review", "SSO and audit logs", "Q3 expansion criteria"],
+    "pending_items": [
+      "Send pilot success scorecard by Friday EOD",
+      "Share pilot proposal addendum with explicit SSO and audit log language"
+    ],
+    "sentiment": "positive"
+  }
+}

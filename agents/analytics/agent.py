@@ -24,6 +24,11 @@ class QueryRequest(BaseModel):
     include_images: Optional[bool] = False  # Whether to return base64 images
 
 
+def normalize_name(value: str) -> str:
+    """Normalize names for robust matching across datasets."""
+    return "".join(ch for ch in value.lower() if ch.isalnum())
+
+
 def load_chart_descriptions() -> dict:
     """Load pre-computed chart descriptions."""
     if DESCRIPTIONS_FILE.exists():
@@ -35,12 +40,14 @@ def load_chart_descriptions() -> dict:
 def find_client_charts(client_name: str) -> list[dict]:
     """Find chart images matching client name."""
     client_lower = client_name.lower().replace(" ", "_")
+    client_norm = normalize_name(client_name)
     charts = []
     
     # First check: actual image files
     for ext in ["*.png", "*.jpg", "*.jpeg"]:
         for file_path in DATA_DIR.glob(ext):
-            if client_lower in file_path.stem.lower() or "acme" in file_path.stem.lower():
+            file_norm = normalize_name(file_path.stem)
+            if client_lower in file_path.stem.lower() or client_norm in file_norm:
                 charts.append({
                     "file_name": file_path.name,
                     "file_path": str(file_path),
@@ -51,7 +58,8 @@ def find_client_charts(client_name: str) -> list[dict]:
     if not charts:
         descriptions = load_chart_descriptions()
         for file_name in descriptions.keys():
-            if "acme" in file_name.lower() or client_lower in file_name.lower():
+            file_norm = normalize_name(file_name)
+            if client_lower in file_name.lower() or client_norm in file_norm:
                 charts.append({
                     "file_name": file_name,
                     "file_path": str(DATA_DIR / file_name),

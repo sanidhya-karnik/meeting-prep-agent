@@ -30,6 +30,11 @@ class QueryRequest(BaseModel):
     doc_types: Optional[list[str]] = None
 
 
+def normalize_name(value: str) -> str:
+    """Normalize names for robust matching across datasets."""
+    return "".join(ch for ch in value.lower() if ch.isalnum())
+
+
 def get_cached_docs() -> dict:
     """Load pre-parsed document cache."""
     if CACHE_FILE.exists():
@@ -64,6 +69,7 @@ def parse_document_with_docling(file_path: Path) -> dict:
 def find_client_docs(client_name: str) -> list[dict]:
     """Find documents matching client name."""
     client_lower = client_name.lower().replace(" ", "_")
+    client_norm = normalize_name(client_name)
     docs = []
     
     # Check cache first
@@ -73,16 +79,17 @@ def find_client_docs(client_name: str) -> list[dict]:
     if client_lower in cache:
         return cache[client_lower].get("documents", [])
     
-    # Try partial match in cache
+    # Try normalized or partial match in cache
     for key in cache:
-        if key in client_lower or client_lower in key or "acme" in client_lower.lower():
-            if key == "acme" or "acme" in key:
-                return cache[key].get("documents", [])
+        key_norm = normalize_name(key)
+        if key in client_lower or client_lower in key or key_norm in client_norm or client_norm in key_norm:
+            return cache[key].get("documents", [])
     
     # Fallback: search for files
     for ext in ["*.pdf", "*.docx", "*.doc"]:
         for file_path in DATA_DIR.glob(ext):
-            if client_lower in file_path.stem.lower() or "acme" in file_path.stem.lower():
+            file_norm = normalize_name(file_path.stem)
+            if client_lower in file_path.stem.lower() or client_norm in file_norm:
                 # Determine doc type from filename
                 doc_type = "unknown"
                 name_lower = file_path.stem.lower()

@@ -1,0 +1,52 @@
+table,column,data_type,constraint_or_default,description
+clients,id,SERIAL,PRIMARY KEY,Unique client identifier
+clients,name,VARCHAR(255),NOT NULL,Client name
+clients,industry,VARCHAR(100),,Industry vertical
+clients,company_size,VARCHAR(50),,Company size text
+clients,headquarters,VARCHAR(255),,Headquarters location
+clients,website,VARCHAR(255),,Company website
+clients,created_at,TIMESTAMP,DEFAULT CURRENT_TIMESTAMP,Record creation timestamp
+contacts,id,SERIAL,PRIMARY KEY,Unique contact identifier
+contacts,client_id,INTEGER,REFERENCES clients(id),Parent client
+contacts,name,VARCHAR(255),NOT NULL,Contact full name
+contacts,role,VARCHAR(100),,Contact role/title
+contacts,email,VARCHAR(255),,Contact email
+contacts,phone,VARCHAR(50),,Contact phone
+contacts,sentiment,VARCHAR(50),,Champion/Supportive/Neutral/Detractor
+contacts,notes,TEXT,,Stakeholder notes
+contacts,is_primary,BOOLEAN,DEFAULT FALSE,Primary contact flag
+contacts,created_at,TIMESTAMP,DEFAULT CURRENT_TIMESTAMP,Record creation timestamp
+deals,id,SERIAL,PRIMARY KEY,Unique deal identifier
+deals,client_id,INTEGER,REFERENCES clients(id),Owning client
+deals,name,VARCHAR(255),NOT NULL,Deal name
+deals,stage,VARCHAR(50),,Pipeline stage
+deals,deal_type,VARCHAR(100),,Deal type or motion
+deals,value,DECIMAL(12,2),,Deal amount
+deals,currency,VARCHAR(3),DEFAULT 'USD',Currency code
+deals,close_date,DATE,,Expected/actual close date
+deals,probability,INTEGER,,Win probability percent
+deals,owner,VARCHAR(255),,Deal owner (free text)
+deals,competitor,VARCHAR(255),,Primary competitor
+deals,created_at,TIMESTAMP,DEFAULT CURRENT_TIMESTAMP,Record creation timestamp
+deals,updated_at,TIMESTAMP,DEFAULT CURRENT_TIMESTAMP,Record update timestamp
+activities,id,SERIAL,PRIMARY KEY,Unique activity identifier
+activities,client_id,INTEGER,REFERENCES clients(id),Related client
+activities,deal_id,INTEGER,REFERENCES deals(id),Related deal
+activities,activity_type,VARCHAR(50),,Call/Email/Meeting/Note
+activities,subject,VARCHAR(255),,Activity subject
+activities,description,TEXT,,Activity details
+activities,participants,TEXT[],,Participants array
+activities,duration_minutes,INTEGER,,Duration in minutes
+activities,activity_date,TIMESTAMP,,Activity date/time
+activities,next_steps,TEXT,,Follow-up actions
+activities,created_by,VARCHAR(255),,Activity creator
+activities,created_at,TIMESTAMP,DEFAULT CURRENT_TIMESTAMP,Record creation timestamp
+health_metrics,id,SERIAL,PRIMARY KEY,Unique health metric identifier
+health_metrics,client_id,INTEGER,REFERENCES clients(id),Related client
+health_metrics,engagement_score,INTEGER,,Engagement score
+health_metrics,nps_score,INTEGER,,NPS score
+health_metrics,support_tickets_open,INTEGER,,Open support tickets
+health_metrics,last_login,DATE,,Last login date
+health_metrics,usage_trend,VARCHAR(20),,up/down/stable
+health_metrics,risk_level,VARCHAR(20),,low/medium/high
+health_metrics,recorded_at,TIMESTAMP,DEFAULT CURRENT_TIMESTAMP,Snapshot timestamp

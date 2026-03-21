@@ -22,12 +22,19 @@ class QueryRequest(BaseModel):
     days_back: Optional[int] = 14
 
 
+def normalize_name(value: str) -> str:
+    """Normalize names for robust matching across datasets."""
+    return "".join(ch for ch in value.lower() if ch.isalnum())
+
+
 def find_slack_channel(client_name: str) -> Optional[Path]:
     """Find Slack export file matching client name."""
     client_lower = client_name.lower().replace(" ", "-")
+    client_norm = normalize_name(client_name)
     
     for file in DATA_DIR.glob("*.json"):
-        if client_lower in file.stem.lower() or file.stem.lower() in client_lower:
+        file_norm = normalize_name(file.stem)
+        if client_lower in file.stem.lower() or file.stem.lower() in client_lower or client_norm in file_norm:
             return file
     
     # Try partial match
@@ -37,7 +44,7 @@ def find_slack_channel(client_name: str) -> Optional[Path]:
             with open(file) as f:
                 data = json.load(f)
                 channel_name = data.get("channel", {}).get("name", "")
-                if client_lower in channel_name.lower():
+                if client_lower in channel_name.lower() or client_norm in normalize_name(channel_name):
                     return file
         except:
             continue

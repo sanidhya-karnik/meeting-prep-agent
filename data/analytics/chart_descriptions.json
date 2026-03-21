@@ -5,5 +5,15 @@
 
   "acme_engagement_heatmap.png": "Feature engagement analysis shows Dashboard (95%) and Reports (88%) are the most-used features. Analytics usage is growing rapidly (45% to 70% over 4 weeks), suggesting increased data-driven decision making. Integrations (48%) and Admin (30%) have lower but stable usage. Key insight: The Analytics feature shows the strongest week-over-week growth.",
 
-  "acme_support_metrics.png": "Support metrics are excellent. Zero open tickets currently. Ticket volume has decreased from 8 in January to just 2 in March. Average first response time is 1.5 hours (SLA: 2 hours). Average resolution time is 4.2 hours (SLA: 8 hours). All metrics are well within SLA targets, indicating a satisfied customer with minimal support needs."
+  "acme_support_metrics.png": "Support metrics are excellent. Zero open tickets currently. Ticket volume has decreased from 8 in January to just 2 in March. Average first response time is 1.5 hours (SLA: 2 hours). Average resolution time is 4.2 hours (SLA: 8 hours). All metrics are well within SLA targets, indicating a satisfied customer with minimal support needs.",
+
+  "globex_usage_trend.png": "Usage for Globex pilot cohorts is stable-to-growing. Weekly active users increased from 38 to 52 across two warehouse sites after onboarding improvements. Session consistency is strong and supports expansion readiness for Q3 if KPI targets remain on track.",
+
+  "globex_health_score.png": "Globex account health score is 72/100 (watch zone). Customer engagement is good, but expansion confidence depends on pilot KPI attainment and security sign-off. Current risk level is medium with upside if pilot milestones are delivered on time.",
+
+  "globex_support_metrics.png": "Support performance is healthy for pilot scale. One low-priority open ticket, first response time at 1.8 hours, and average resolution at 5.1 hours. SLA adherence remains on target, with no blocker-level incidents.",
+
+  "opp-acme-0001_kpi_snapshot.png": "Opportunity OPP-ACME-0001 KPI snapshot: engagement trend up, executive scrutiny high due to CFO involvement, and primary risk is unresolved ROI/TCO narrative versus competitor pricing.",
+
+  "opp-globex-0001_kpi_snapshot.png": "Opportunity OPP-GLOBEX-0001 KPI snapshot: pilot scope is defined, expansion potential is strong, and key risk is security/legal alignment before steering committee review."
 }

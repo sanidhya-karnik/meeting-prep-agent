@@ -1,5 +1,7 @@
 {
-  "acme": {
+  "acme_corp": {
+    "account_name": "Acme Corp",
+    "external_opportunity_id": "OPP-ACME-0001",
     "documents": [
       {
         "title": "Acme Corp - Enterprise Proposal v3",
@@ -7,8 +9,9 @@
         "type": "proposal",
         "last_modified": "2026-03-15",
         "num_pages": 2,
-        "summary": "3-year Enterprise Software License proposal for Acme Corp manufacturing operations. Total investment $450,000 ($150K/year) with 10% volume discount applied. Includes implementation services ($45K), training ($15K), and 24/7 premium support ($30K/year). Payment terms: Net 30. SLA: 99.9% uptime guarantee. Implementation timeline: 8-10 weeks from contract signing.",
+        "summary": "Opportunity OPP-ACME-0001. 3-year enterprise license proposal for Acme Corp manufacturing operations. Total investment $450,000 (discounted from $510,000). Includes implementation services, training, and premium support. Payment terms: Net 30. SLA: 99.9% uptime guarantee. Implementation timeline: 8-10 weeks from contract signing.",
         "key_terms": [
+          "Opportunity: OPP-ACME-0001",
           "Contract Duration: 3 years",
           "Total Value: $450,000 (discounted from $510,000)",
           "Payment Terms: Net 30",
@@ -30,34 +33,90 @@
         "type": "meeting_notes",
         "last_modified": "2026-03-10",
         "num_pages": 2,
-        "summary": "Technical deep-dive meeting with John Smith (VP Eng) and Mike Chen (IT Director). Covered SAP S/4HANA integration approach using REST APIs, security/compliance review (SOC 2, US data residency confirmed), and implementation timeline discussion. John emphasized Q2 go-live target. Phased rollout agreed: pilot with engineering team first.",
-        "attendees": ["John Smith", "Mike Chen", "Sarah Chen", "Tom Wilson"],
+        "summary": "Opportunity OPP-ACME-0001 technical deep-dive with John Smith and Mike Chen. Covered SAP integration, security/compliance, and implementation timeline. Q2 go-live target reiterated. CFO Lisa Park requested stronger ROI/TCO narrative for review call.",
+        "attendees": ["John Smith", "Mike Chen", "Sarah Chen", "Tom Wilson", "Lisa Park"],
         "decisions": [
-          "Will use REST API for ERP integration (not file-based)",
-          "Phased rollout: pilot with engineering team first",
-          "Weekly check-ins during implementation"
+          "Use REST API for ERP integration (not file-based)",
+          "Phased rollout with engineering pilot first",
+          "Weekly implementation check-ins after signature"
         ],
         "open_items": [
           {
-            "item": "Confirm implementation timeline with delivery team",
+            "item": "Send ROI/TCO comparison deck to John and Lisa",
             "owner": "Sarah Chen",
-            "due": "Mar 18",
+            "due": "2026-03-21",
             "status": "Pending"
           },
           {
-            "item": "Share API documentation with Mike",
-            "owner": "Tom Wilson",
-            "due": "Mar 12",
-            "status": "Done"
+            "item": "Confirm implementation timeline with delivery team",
+            "owner": "Sarah Chen",
+            "due": "2026-03-21",
+            "status": "Pending"
           },
           {
-            "item": "Schedule security review call with legal",
-            "owner": "Mike Chen",
-            "due": "Mar 20",
+            "item": "Finalize legal language for US-only data residency",
+            "owner": "Tom Wilson",
+            "due": "2026-03-22",
+            "status": "In Progress"
+          }
+        ],
+        "next_meeting": "Q1 Review - 2026-03-22 with Lisa Park (CFO)"
+      }
+    ]
+  },
+  "globex_industries": {
+    "account_name": "Globex Industries",
+    "external_opportunity_id": "OPP-GLOBEX-0001",
+    "documents": [
+      {
+        "title": "Globex Industries - Pilot Proposal v2",
+        "file_name": "Globex_Pilot_Proposal_v2.pdf",
+        "type": "proposal",
+        "last_modified": "2026-03-19",
+        "num_pages": 2,
+        "summary": "Opportunity OPP-GLOBEX-0001. 6-month pilot proposal for 2 warehouses and 50 users. Contract value $75,000 with expansion option tied to KPI attainment. Includes SSO, audit logs, and onboarding plan for operations teams.",
+        "key_terms": [
+          "Opportunity: OPP-GLOBEX-0001",
+          "Pilot Duration: 6 months",
+          "Pilot Scope: 2 warehouses, 50 users",
+          "Total Value: $75,000",
+          "Expansion Trigger: KPI targets met in pilot phase",
+          "Included: SSO, audit logs, admin reporting"
+        ],
+        "pricing": {
+          "pilot_license": "$52,000",
+          "implementation": "$15,000",
+          "training": "$8,000"
+        }
+      },
+      {
+        "title": "Globex Industries - Pilot Scope Notes (March 19)",
+        "file_name": "Globex_Pilot_Notes_2026-03-19.docx",
+        "type": "meeting_notes",
+        "last_modified": "2026-03-19",
+        "num_pages": 2,
+        "summary": "Opportunity OPP-GLOBEX-0001 pilot scope session with Rachel Torres and David Kim. Focus areas: adoption KPIs, warehouse onboarding cadence, and security/legal readiness before steering call.",
+        "attendees": ["Rachel Torres", "David Kim", "Sarah Chen"],
+        "decisions": [
+          "Pilot success scorecard will be shared before steering review",
+          "Security/legal addendum to include explicit SSO and audit log commitments",
+          "Expansion decision will be evaluated for Q3 budget cycle"
+        ],
+        "open_items": [
+          {
+            "item": "Send pilot success scorecard draft",
+            "owner": "Sarah Chen",
+            "due": "2026-03-22",
+            "status": "Pending"
+          },
+          {
+            "item": "Share security/legal addendum draft",
+            "owner": "Sarah Chen",
+            "due": "2026-03-22",
             "status": "Pending"
           }
         ],
-        "next_meeting": "Q1 Review - March 22, 2026 with Lisa Park (CFO)"
+        "next_meeting": "Steering Committee Review - 2026-03-25"
       }
     ]
   }

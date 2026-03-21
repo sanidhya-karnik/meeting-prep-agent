@@ -1,0 +1,82 @@
+table,column,data_type,constraint_or_default,description
+clients,id,SERIAL,PRIMARY KEY,Unique client identifier
+clients,name,VARCHAR(255),NOT NULL,Client name
+clients,industry,VARCHAR(100),,Normalized industry value
+clients,company_size,VARCHAR(50),,Human-readable company size
+clients,headquarters,VARCHAR(255),,Headquarters location
+clients,website,VARCHAR(255),,Company website
+clients,year_established,INTEGER,,Year company was founded
+clients,annual_revenue_musd,DECIMAL(12,2),,Annual revenue in millions USD
+clients,employee_count,INTEGER,,Employee count
+clients,parent_company,VARCHAR(255),,Parent company name
+clients,data_quality_flag,VARCHAR(50),DEFAULT 'clean',Tracks account mapping quality
+clients,created_at,TIMESTAMP,DEFAULT CURRENT_TIMESTAMP,Record creation timestamp
+sales_reps,id,SERIAL,PRIMARY KEY,Unique sales rep identifier
+sales_reps,rep_name,VARCHAR(255),NOT NULL UNIQUE,Sales rep full name
+sales_reps,manager_name,VARCHAR(255),,Direct manager
+sales_reps,regional_office,VARCHAR(50),,Sales territory/region
+sales_reps,created_at,TIMESTAMP,DEFAULT CURRENT_TIMESTAMP,Record creation timestamp
+products,id,SERIAL,PRIMARY KEY,Unique product identifier
+products,name,VARCHAR(255),NOT NULL UNIQUE,Canonical product name
+products,series,VARCHAR(100),,Product family/series
+products,list_price,DECIMAL(12,2),,Suggested list price
+products,is_active,BOOLEAN,DEFAULT TRUE,Product availability flag
+products,created_at,TIMESTAMP,DEFAULT CURRENT_TIMESTAMP,Record creation timestamp
+contacts,id,SERIAL,PRIMARY KEY,Unique contact identifier
+contacts,client_id,INTEGER,REFERENCES clients(id),Parent client
+contacts,name,VARCHAR(255),NOT NULL,Contact full name
+contacts,role,VARCHAR(100),,Contact role/title
+contacts,email,VARCHAR(255),,Contact email
+contacts,phone,VARCHAR(50),,Contact phone
+contacts,sentiment,VARCHAR(50),,Champion/Supportive/Neutral/Detractor
+contacts,notes,TEXT,,Stakeholder notes
+contacts,is_primary,BOOLEAN,DEFAULT FALSE,Primary contact flag
+contacts,created_at,TIMESTAMP,DEFAULT CURRENT_TIMESTAMP,Record creation timestamp
+deals,id,SERIAL,PRIMARY KEY,Unique deal identifier
+deals,external_opportunity_id,VARCHAR(50),UNIQUE,Source opportunity key from pipeline
+deals,client_id,INTEGER,REFERENCES clients(id),Owning client
+deals,product_id,INTEGER,REFERENCES products(id),Primary product in deal
+deals,owner_id,INTEGER,REFERENCES sales_reps(id),Owning sales rep
+deals,name,VARCHAR(255),NOT NULL,Deal name
+deals,stage,VARCHAR(50),,Prospecting/Engaging/Won/Lost mapping
+deals,deal_type,VARCHAR(100),,Deal type or motion
+deals,value,DECIMAL(12,2),,Closed/expected value
+deals,list_price_snapshot,DECIMAL(12,2),,List price captured at deal time
+deals,currency,VARCHAR(3),DEFAULT 'USD',Currency code
+deals,engage_date,DATE,,Date when engaging stage started
+deals,close_date,DATE,,Expected/actual close date
+deals,probability,INTEGER,,Win probability percent
+deals,competitor,VARCHAR(255),,Primary competitor
+deals,created_at,TIMESTAMP,DEFAULT CURRENT_TIMESTAMP,Record creation timestamp
+deals,updated_at,TIMESTAMP,DEFAULT CURRENT_TIMESTAMP,Record update timestamp
+deal_stage_history,id,SERIAL,PRIMARY KEY,Unique stage history identifier
+deal_stage_history,deal_id,INTEGER,REFERENCES deals(id),Deal reference
+deal_stage_history,stage,VARCHAR(50),NOT NULL,Stage name
+deal_stage_history,entered_at,TIMESTAMP,NOT NULL,Stage entry timestamp
+deal_stage_history,exited_at,TIMESTAMP,,Stage exit timestamp
+deal_stage_history,source_system,VARCHAR(50),DEFAULT 'crm_pipeline',Where event came from
+activities,id,SERIAL,PRIMARY KEY,Unique activity identifier
+activities,client_id,INTEGER,REFERENCES clients(id),Related client
+activities,deal_id,INTEGER,REFERENCES deals(id),Related deal
+activities,activity_type,VARCHAR(50),,Call/Email/Meeting/Note
+activities,subject,VARCHAR(255),,Activity subject
+activities,description,TEXT,,Activity details
+activities,participants,TEXT[],,Participants array
+activities,duration_minutes,INTEGER,,Duration in minutes
+activities,activity_date,TIMESTAMP,,Activity date/time
+activities,next_steps,TEXT,,Follow-up actions
+activities,created_by,VARCHAR(255),,Activity creator
+activities,created_at,TIMESTAMP,DEFAULT CURRENT_TIMESTAMP,Record creation timestamp
+health_metrics,id,SERIAL,PRIMARY KEY,Unique health metric identifier
+health_metrics,client_id,INTEGER,REFERENCES clients(id),Related client
+health_metrics,engagement_score,INTEGER,,Engagement score
+health_metrics,nps_score,INTEGER,,NPS score
+health_metrics,support_tickets_open,INTEGER,,Open support tickets
+health_metrics,last_login,DATE,,Last login date
+health_metrics,usage_trend,VARCHAR(20),,up/down/stable
+health_metrics,risk_level,VARCHAR(20),,low/medium/high
+health_metrics,win_rate_90d,DECIMAL(5,2),,Recent close win rate percent
+health_metrics,avg_cycle_days_90d,DECIMAL(8,2),,Average deal cycle in days
+health_metrics,avg_closed_value_90d,DECIMAL(12,2),,Average closed deal value
+health_metrics,open_pipeline_value,DECIMAL(12,2),,Current open pipeline value
+health_metrics,recorded_at,TIMESTAMP,DEFAULT CURRENT_TIMESTAMP,Snapshot timestamp
