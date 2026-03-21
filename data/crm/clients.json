@@ -1,0 +1,121 @@
+{
+  "acme corp": {
+    "client": {
+      "name": "Acme Corp",
+      "industry": "Manufacturing",
+      "company_size": "2,500 employees",
+      "headquarters": "Chicago, IL"
+    },
+    "stakeholders": [
+      {
+        "name": "John Smith",
+        "role": "VP Engineering",
+        "email": "john.smith@acmecorp.com",
+        "sentiment": "Champion",
+        "notes": "Primary technical decision maker. Very hands-on, wants to see demos. Previously worked at a company that used our competitor."
+      },
+      {
+        "name": "Lisa Park",
+        "role": "CFO",
+        "email": "lisa.park@acmecorp.com",
+        "sentiment": "Neutral",
+        "notes": "Focused on ROI and total cost of ownership. Has not attended recent calls. May need executive alignment meeting."
+      },
+      {
+        "name": "Mike Chen",
+        "role": "IT Director",
+        "email": "mike.chen@acmecorp.com",
+        "sentiment": "Supportive",
+        "notes": "Concerned about integration with existing ERP. Wants detailed security documentation. Satisfied after technical deep-dive."
+      }
+    ],
+    "deal": {
+      "name": "Acme Corp - Enterprise License",
+      "stage": "Negotiation",
+      "value": "$450,000",
+      "close_date": "2026-04-15",
+      "probability": 75,
+      "owner": "Sarah Chen",
+      "competitor": "TechRival Inc"
+    },
+    "recent_activity": [
+      {
+        "date": "2026-03-18",
+        "type": "Call",
+        "subject": "Pricing Discussion",
+        "note": "Discussed pricing concerns. John pushing for 10% discount. Mentioned competitor is offering lower price but fewer features. Need to emphasize ROI.",
+        "next_steps": "Send updated ROI projections"
+      },
+      {
+        "date": "2026-03-15",
+        "type": "Email",
+        "subject": "Revised Proposal Sent",
+        "note": "Sent revised proposal v3 with adjusted payment terms. Net 30 instead of Net 15. Added 99.9% SLA guarantee.",
+        "next_steps": null
+      }
+    ],
+    "health_indicators": {
+      "engagement_score": 85,
+      "nps_score": 42,
+      "support_tickets_open": 0,
+      "usage_trend": "up",
+      "risk_level": "low"
+    }
+  },
+  "globex": {
+    "client": {
+      "name": "Globex Industries",
+      "industry": "Logistics",
+      "company_size": "800 employees",
+      "headquarters": "Austin, TX"
+    },
+    "stakeholders": [
+      {
+        "name": "Rachel Torres",
+        "role": "COO",
+        "email": "rachel.torres@globex.com",
+        "sentiment": "Champion",
+        "notes": "Driving the digital transformation initiative. Very responsive, pushes internal team to move fast."
+      },
+      {
+        "name": "David Kim",
+        "role": "Head of IT",
+        "email": "david.kim@globex.com",
+        "sentiment": "Neutral",
+        "notes": "Concerned about change management and security. Wants SSO and audit logs confirmed before legal review."
+      }
+    ],
+    "deal": {
+      "name": "Globex - Pilot Program",
+      "stage": "Proposal",
+      "value": "$75,000",
+      "close_date": "2026-05-01",
+      "probability": 60,
+      "owner": "Sarah Chen",
+      "competitor": null
+    },
+    "recent_activity": [
+      {
+        "date": "2026-03-21",
+        "type": "Message",
+        "subject": "Steering Call Prep",
+        "note": "Rachel requested pilot success scorecard with KPIs for steering call next week. Need adoption metrics and time saved per site.",
+        "next_steps": "Send pilot success scorecard by Friday EOD"
+      },
+      {
+        "date": "2026-03-19",
+        "type": "Meeting",
+        "subject": "Pilot Scope Discussion",
+        "note": "Defined pilot scope: 2 warehouses, 50 users. Rachel wants to prove value before full rollout. David needs SSO and audit logs confirmed.",
+        "next_steps": "Send pilot proposal with security addendum"
+      }
+    ],
+    "health_indicators": {
+      "engagement_score": 72,
+      "nps_score": null,
+      "support_tickets_open": 1,
+      "usage_trend": "stable",
+      "risk_level": "medium"
+    }
+  }
+}

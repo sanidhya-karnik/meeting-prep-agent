@@ -1,29 +1,78 @@
 """
-CRM Agent for PreCall Briefing
+CRM Agent for Meeting Prep Agent
 
-Fetches client info, deal stage, stakeholders, and recent activity from PostgreSQL.
-Mimics Salesforce-like data structure.
+Fetches client info, deal stage, stakeholders, and recent activity.
+Supports both PostgreSQL (container) and JSON (local dev) data sources.
 """
 
 import os
+import json
+from pathlib import Path
 from fastapi import FastAPI
 from pydantic import BaseModel
-import psycopg2
-from psycopg2.extras import RealDictCursor
 
 app = FastAPI(title="CRM Agent")
 
-# Database connection settings
-DB_HOST = os.getenv("DB_HOST", "postgres")
-DB_PORT = os.getenv("DB_PORT", "5432")
-DB_NAME = os.getenv("DB_NAME", "crm")
-DB_USER = os.getenv("DB_USER", "crm_user")
-DB_PASS = os.getenv("DB_PASS", "crm_pass")
+# Data source configuration
+# If CRM_DATA_PATH is set, use JSON file; otherwise try PostgreSQL
+CRM_DATA_PATH = os.getenv("CRM_DATA_PATH")
+USE_JSON = CRM_DATA_PATH is not None
+
+if not USE_JSON:
+    try:
+        import psycopg2
+        from psycopg2.extras import RealDictCursor
+        DB_HOST = os.getenv("DB_HOST", "postgres")
+        DB_PORT = os.getenv("DB_PORT", "5432")
+        DB_NAME = os.getenv("DB_NAME", "crm")
+        DB_USER = os.getenv("DB_USER", "crm_user")
+        DB_PASS = os.getenv("DB_PASS", "crm_pass")
+    except ImportError:
+        USE_JSON = True
+        CRM_DATA_PATH = "./data/crm/clients.json"
 
 
 class QueryRequest(BaseModel):
     client_name: str
 
+
+def normalize_name(value: str) -> str:
+    """Normalize names for robust matching across datasets."""
+    return "".join(ch for ch in value.lower() if ch.isalnum())
+
+
+# ============================================================================
+# JSON Data Source (Local Development)
+# ============================================================================
+
+def load_client_data_json(client_name: str) -> dict:
+    """Load client data from JSON file."""
+    data_path = Path(CRM_DATA_PATH)
+    if not data_path.exists():
+        return {"error": f"CRM data file not found at {data_path}"}
+    
+    with open(data_path) as f:
+        data = json.load(f)
+    
+    # Normalize client name for lookup
+    client_norm = normalize_name(client_name)
+    
+    # Try exact key match first
+    key = client_name.lower().strip()
+    if key in data:
+        return data[key]
+    
+    # Try normalized match
+    for k, v in data.items():
+        if normalize_name(k) == client_norm or client_norm in normalize_name(k):
+            return v
+    
+    return {"error": f"Client '{client_name}' not found in CRM"}
+
+
+# ============================================================================
+# PostgreSQL Data Source (Container)
+# ============================================================================
 
 def get_db_connection():
     """Create database connection."""
@@ -37,7 +86,7 @@ def get_db_connection():
     )
 
 
-def fetch_client_data(client_name: str) -> dict:
+def load_client_data_postgres(client_name: str) -> dict:
     """Fetch all client data from PostgreSQL."""
     try:
         conn = get_db_connection()
@@ -146,23 +195,39 @@ def fetch_client_data(client_name: str) -> dict:
         return {"error": f"Database error: {str(e)}"}
 
 
+# ============================================================================
+# API Endpoints
+# ============================================================================
+
 @app.get("/health")
 async def health():
     """Health check endpoint."""
-    try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("SELECT 1")
-        conn.close()
-        return {"status": "healthy", "database": "connected"}
-    except Exception as e:
-        return {"status": "unhealthy", "error": str(e)}
+    if USE_JSON:
+        data_path = Path(CRM_DATA_PATH)
+        return {
+            "status": "healthy",
+            "data_source": "json",
+            "data_path": str(data_path),
+            "exists": data_path.exists()
+        }
+    else:
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute("SELECT 1")
+            conn.close()
+            return {"status": "healthy", "data_source": "postgres", "database": "connected"}
+        except Exception as e:
+            return {"status": "unhealthy", "data_source": "postgres", "error": str(e)}
 
 
 @app.post("/query")
 async def query(request: QueryRequest):
     """Query CRM for client information."""
-    return fetch_client_data(request.client_name)
+    if USE_JSON:
+        return load_client_data_json(request.client_name)
+    else:
+        return load_client_data_postgres(request.client_name)
 
 
 if __name__ == "__main__":

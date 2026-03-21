@@ -14,7 +14,8 @@ from typing import Optional
 
 app = FastAPI(title="Communications Agent")
 
-DATA_DIR = Path("/app/data")
+import os
+DATA_DIR = Path(os.getenv("COMMS_DATA_PATH", "./data/slack"))
 
 
 class QueryRequest(BaseModel):

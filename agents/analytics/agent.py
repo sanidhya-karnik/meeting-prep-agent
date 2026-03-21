@@ -15,7 +15,7 @@ from typing import Optional
 
 app = FastAPI(title="Analytics Agent")
 
-DATA_DIR = Path("/app/data")
+DATA_DIR = Path(os.getenv("ANALYTICS_DATA_PATH", "./data/analytics"))
 DESCRIPTIONS_FILE = DATA_DIR / "chart_descriptions.json"
 
 

@@ -14,7 +14,7 @@ from typing import Optional
 
 app = FastAPI(title="Docs Agent")
 
-DATA_DIR = Path("/app/data")
+DATA_DIR = Path(os.getenv("DOCS_DATA_PATH", "./data/documents"))
 CACHE_FILE = DATA_DIR / "parsed_docs_cache.json"
 
 # Optional: Use Docling for parsing (if available)
