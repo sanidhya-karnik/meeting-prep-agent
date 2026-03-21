@@ -1,5 +1,14 @@
 # Meeting Prep Agent
 
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Podman](https://img.shields.io/badge/Podman-892CA0?style=for-the-badge&logo=podman&logoColor=white)
+![IBM Granite](https://img.shields.io/badge/IBM_Granite-052FAD?style=for-the-badge&logo=ibm&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
+![Red Hat](https://img.shields.io/badge/Red_Hat-EE0000?style=for-the-badge&logo=redhat&logoColor=white)
+
 **Multi-agent system that generates pre-call briefings from CRM, Slack, documents, and analytics.**
 
 Built for the *Pods, Prompts & Prototypes* hackathon (Red Hat + IBM) - Advanced tier: Multi-Agent Orchestration.
@@ -34,7 +43,7 @@ Meeting Prep Agent is a multi-agent system that:
                           │
 ┌─────────────────────────▼───────────────────────────────────────┐
 │                    Orchestrator (:8000)                         │
-│                 LangChain + Qwen3-4B                            │
+│              LangChain + IBM Granite                            │
 └───┬─────────────┬─────────────┬─────────────┬───────────────────┘
     │             │             │             │
 ┌───▼───┐   ┌─────▼─────┐   ┌───▼───┐   ┌─────▼─────┐
@@ -57,16 +66,16 @@ Meeting Prep Agent is a multi-agent system that:
 ### Prerequisites
 
 - Podman Desktop with Podman AI Lab extension
-- Qwen3-4B model running in Podman AI Lab on port 8080
+- IBM Granite 4.0 Micro model running in Podman AI Lab
 - Node.js (for generating sample DOCX)
 - Python 3.11+ (for generating sample charts)
 
 ### 1. Start the LLM
 
 In Podman AI Lab:
-1. Download `qwen/Qwen3-4B-Thinking-2507-GGUF`
-2. Start the model server on port 8080
-3. Verify: `curl http://localhost:8080/v1/models`
+1. Download `ibm-granite/granite-4.0-micro-GGUF`
+2. Start the model server (note the assigned port)
+3. Verify: `curl http://localhost:<PORT>/v1/models`
 
 ### 2. Generate Sample Data (Optional)
 
@@ -192,7 +201,7 @@ precall-briefing/
 
 | Component | Technology | Why |
 |-----------|------------|-----|
-| **LLM** | Qwen3-4B (Podman AI Lab) | Local, fast, good at structured output |
+| **LLM** | IBM Granite 4.0 Micro (Podman AI Lab) | Local, fast, good at structured output, Red Hat/IBM ecosystem |
 | **Orchestration** | LangChain + FastAPI | Agent coordination, async parallel queries |
 | **CRM Data** | PostgreSQL | Real database queries, Salesforce-like schema |
 | **Doc Parsing** | Docling (IBM) | Preserves structure from PDF/DOCX, open source |
