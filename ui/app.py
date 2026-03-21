@@ -394,7 +394,7 @@ if st.button("🚀 Generate Briefing", type="primary", use_container_width=True)
                         "{line.get('line', '')}" {render_citation(line.get('source', 'crm'))}
                     </p>'''
                 script_html += '</div>'
-                st.markdown(render_card("🎬", "Opening Script", script_html), unsafe_allow_html=True)
+                st.markdown(render_card("🎬", "Suggested Opening Script", script_html), unsafe_allow_html=True)
             
             # === ACTION BUTTONS ===
             st.markdown("---")

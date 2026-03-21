@@ -36,26 +36,7 @@ Meeting Prep Agent is a multi-agent system that:
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                         Streamlit UI (:8501)                    │
-└─────────────────────────┬───────────────────────────────────────┘
-                          │
-┌─────────────────────────▼───────────────────────────────────────┐
-│                    Orchestrator (:8000)                         │
-│              LangChain + IBM Granite                            │
-└───┬─────────────┬─────────────┬─────────────┬───────────────────┘
-    │             │             │             │
-┌───▼───┐   ┌─────▼─────┐   ┌───▼───┐   ┌─────▼─────┐
-│  CRM  │   │   Comms   │   │  Docs │   │ Analytics │
-│ :8001 │   │   :8002   │   │ :8003 │   │   :8004   │
-└───┬───┘   └─────┬─────┘   └───┬───┘   └─────┬─────┘
-    │             │             │             │
-┌───▼───┐   ┌─────▼─────┐   ┌───▼───┐   ┌─────▼─────┐
-│Postgre│   │   Slack   │   │  PDF  │   │   PNG     │
-│  SQL  │   │  Export   │   │ DOCX  │   │  Charts   │
-└───────┘   └───────────┘   └───────┘   └───────────┘
-```
+![Meeting Prep Agent Architecture](docs/architecture.png)
 
 **All containers communicate over a Podman network. The LLM runs in Podman AI Lab on the host.**
 
