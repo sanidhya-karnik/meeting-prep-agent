@@ -7,9 +7,9 @@
   3. Terminal showing services running (optional)
 
 - Files to show in order:
-  - `data/demo/01_CRM_Data.md`
-  - `data/demo/02_Slack_Threads.md`
-  - `data/demo/03_Documents.md`
+  - `01_CRM_Data.md`
+  - `02_Slack_Threads.md`
+  - `03_Documents.md`
 
 ---
 
@@ -98,9 +98,10 @@
 - **"Aha" moment**: ROI projections were requested but never sent (shows up in Slack AND Docs)
 - **Citations**: Every piece of info traceable to its source
 
-## Demo Files Location
+## Demo Files in This Folder
 ```
 data/demo/
+├── 00_DEMO_SCRIPT.md     # This script
 ├── 01_CRM_Data.md        # Company, deal, stakeholders, health
 ├── 02_Slack_Threads.md   # Conversations with pending items
 └── 03_Documents.md       # Proposal terms, meeting notes, open items
