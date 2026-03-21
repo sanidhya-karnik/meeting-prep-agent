@@ -80,7 +80,7 @@ node generate_meeting_notes.js
 ### 3. Start All Services
 
 ```bash
-cd precall-briefing
+cd meeting-prep-agent
 podman-compose up --build
 ```
 
@@ -129,7 +129,7 @@ Click "Generate Briefing" and watch the magic happen.
 ## Project Structure
 
 ```
-precall-briefing/
+meeting-prep-agent/
 ├── podman-compose.yml          # Container orchestration
 ├── README.md
 ├── ARCHITECTURE.md             # Detailed technical docs

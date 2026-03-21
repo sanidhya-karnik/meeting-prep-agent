@@ -219,8 +219,8 @@ def render_card(icon: str, title: str, content: str) -> str:
 
 
 # Header
-st.title("📋 Meeting Prep Agent")
-st.markdown("*Get up to speed on any client in 60 seconds*")
+st.title("📋 Kairo")
+st.markdown("*Your AI Meeting Prep Agent - Get up to speed on any client in 60 seconds*")
 
 st.markdown("---")
 
