@@ -1,10 +1,11 @@
 """
-Meeting Prep Agent UI
+Kairo - AI Meeting Prep Agent
 
-Streamlit interface with card-based layout and source citations.
+Professional Streamlit interface with card-based layout and source citations.
 """
 
 import os
+import time
 import streamlit as st
 import requests
 
@@ -12,65 +13,131 @@ ORCHESTRATOR_URL = os.getenv("ORCHESTRATOR_URL", "http://127.0.0.1:8000")
 
 # Page config
 st.set_page_config(
-    page_title="Meeting Prep Agent",
-    page_icon="📋",
-    layout="wide"
+    page_title="Kairo - Meeting Prep Agent",
+    page_icon="K",
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
-# Custom CSS for cards and citations
+# Professional Light Theme CSS
 st.markdown("""
 <style>
-    .main { padding: 1rem; }
+    /* Import Google Font */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    /* Global styles */
+    .main {
+        padding: 2rem 3rem;
+        background-color: #f8fafc;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    .stApp {
+        background-color: #f8fafc;
+    }
+    
+    /* Header styling */
+    .app-header {
+        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        padding: 32px 40px;
+        border-radius: 16px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .app-title {
+        font-size: 36px;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+    }
+    .app-subtitle {
+        font-size: 18px;
+        color: rgba(255,255,255,0.95);
+        margin: 8px 0 0 0;
+        font-weight: 500;
+    }
+    .app-description {
+        font-size: 14px;
+        color: rgba(255,255,255,0.75);
+        margin: 12px 0 0 0;
+        font-weight: 400;
+        max-width: 700px;
+        line-height: 1.6;
+    }
     
     /* Card styles */
     .briefing-card {
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-        border: 1px solid #334155;
+        background: white;
+        border: 1px solid #e2e8f0;
         border-radius: 12px;
-        padding: 16px;
+        padding: 20px;
         height: 100%;
         min-height: 180px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        transition: box-shadow 0.2s ease;
+        margin-bottom: 0;
+    }
+    .briefing-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    /* Card grid layout */
+    .card-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+    
+    .card-grid .briefing-card {
+        height: 100%;
     }
     .card-header {
         display: flex;
         align-items: center;
-        gap: 8px;
-        margin-bottom: 12px;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #334155;
+        gap: 10px;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f1f5f9;
     }
     .card-icon {
-        font-size: 20px;
+        font-size: 22px;
     }
     .card-title {
         font-weight: 600;
-        font-size: 16px;
-        color: #f1f5f9;
+        font-size: 15px;
+        color: #1e293b;
         margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     .card-content {
-        color: #cbd5e1;
+        color: #475569;
         font-size: 14px;
-        line-height: 1.6;
+        line-height: 1.7;
     }
     .card-content ul {
         margin: 0;
-        padding-left: 20px;
+        padding-left: 18px;
     }
     .card-content li {
-        margin-bottom: 6px;
+        margin-bottom: 10px;
+    }
+    .card-content strong {
+        color: #1e293b;
     }
     
     /* Citation badges */
     .citation {
         display: inline-flex;
         align-items: center;
-        gap: 3px;
-        padding: 2px 8px;
-        border-radius: 10px;
-        font-size: 10px;
-        font-weight: 500;
-        margin-left: 6px;
+        gap: 4px;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        margin-left: 8px;
         cursor: help;
     }
     .cite-crm { background: #dbeafe; color: #1e40af; }
@@ -83,78 +150,158 @@ st.markdown("""
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 22px;
-        height: 22px;
+        width: 24px;
+        height: 24px;
         border-radius: 50%;
         font-weight: 700;
         font-size: 12px;
-        margin-right: 8px;
+        margin-right: 10px;
     }
-    .priority-1 { background: #ef4444; color: white; }
-    .priority-2 { background: #f97316; color: white; }
-    .priority-3 { background: #eab308; color: #1e1e1e; }
-    .priority-4 { background: #22c55e; color: white; }
-    .priority-5 { background: #6b7280; color: white; }
+    .priority-1 { background: #dc2626; color: white; }
+    .priority-2 { background: #ea580c; color: white; }
+    .priority-3 { background: #ca8a04; color: white; }
+    .priority-4 { background: #16a34a; color: white; }
+    .priority-5 { background: #64748b; color: white; }
     
     /* Deal journey */
     .deal-journey {
         display: flex;
         align-items: center;
-        gap: 8px;
-        margin: 16px 0;
+        gap: 12px;
+        margin: 20px 0;
         flex-wrap: wrap;
+        padding: 16px 20px;
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
     }
     .stage-pill {
-        padding: 8px 16px;
-        border-radius: 20px;
+        padding: 10px 20px;
+        border-radius: 24px;
         font-weight: 600;
         font-size: 13px;
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
     }
     .stage-completed { background: #22c55e; color: white; }
-    .stage-current { background: #3b82f6; color: white; box-shadow: 0 0 12px rgba(59,130,246,0.5); }
-    .stage-pending { background: #4b5563; color: #9ca3af; }
-    .stage-arrow { color: #6b7280; font-size: 18px; }
+    .stage-current { background: #2563eb; color: white; box-shadow: 0 0 0 4px rgba(37,99,235,0.2); }
+    .stage-pending { background: #e2e8f0; color: #94a3b8; }
+    .stage-arrow { color: #cbd5e1; font-size: 20px; }
     
     /* Source legend */
     .source-legend {
         display: flex;
-        gap: 12px;
+        gap: 16px;
         flex-wrap: wrap;
-        margin: 8px 0 16px 0;
-        padding: 10px;
-        background: #1e293b;
-        border-radius: 8px;
+        margin: 12px 0 20px 0;
+        padding: 12px 16px;
+        background: white;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        align-items: center;
     }
     .legend-item {
         display: flex;
         align-items: center;
         gap: 6px;
-        font-size: 12px;
-        color: #94a3b8;
+        font-size: 13px;
+        color: #64748b;
     }
     
-    /* Header section */
+    /* Briefing header */
     .briefing-header {
-        margin-bottom: 20px;
+        margin-bottom: 8px;
     }
     .client-name {
-        font-size: 28px;
+        font-size: 32px;
         font-weight: 700;
-        color: #f8fafc;
+        color: #0f172a;
         margin: 0;
+        font-family: 'Inter', sans-serif;
     }
     .meeting-topic {
         font-size: 16px;
-        color: #94a3b8;
-        margin: 4px 0 0 0;
+        color: #64748b;
+        margin: 6px 0 0 0;
+        font-weight: 500;
     }
     
     .gen-time {
-        color: #6b7280;
+        color: #94a3b8;
         font-size: 13px;
+        font-weight: 500;
+    }
+    
+    /* Input styling */
+    .stTextInput > div > div > input {
+        border-radius: 10px;
+        border: 2px solid #e2e8f0;
+        padding: 12px 16px;
+        font-size: 15px;
+        font-family: 'Inter', sans-serif;
+    }
+    .stTextInput > div > div > input:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+    
+    /* Button styling */
+    .stButton > button {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 14px 28px;
+        font-size: 15px;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.2s ease;
+    }
+    .stButton > button:hover {
+        background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+        box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+    }
+    
+    /* Footer */
+    .footer-text {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 13px;
+        padding: 24px 0;
+        border-top: 1px solid #e2e8f0;
+        margin-top: 40px;
+    }
+    
+    /* Analytics chart card */
+    .chart-insight {
+        background: #f8fafc;
+        border-radius: 8px;
+        padding: 12px;
+        margin-top: 8px;
+        border-left: 3px solid #3b82f6;
+    }
+    .chart-insight-title {
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+    .chart-insight-text {
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+    
+    /* Hide Streamlit branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* Pulse animation for active agent */
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -205,8 +352,8 @@ def render_deal_journey(stage: str) -> str:
     return html
 
 
-def render_card(icon: str, title: str, content: str) -> str:
-    """Render a single briefing card."""
+def render_card_html(icon: str, title: str, content: str) -> str:
+    """Render a single briefing card HTML (for use in grid)."""
     return f'''
     <div class="briefing-card">
         <div class="card-header">
@@ -218,11 +365,27 @@ def render_card(icon: str, title: str, content: str) -> str:
     '''
 
 
-# Header
-st.title("📋 Kairo")
-st.markdown("*Your AI Meeting Prep Agent - Get up to speed on any client in 60 seconds*")
+def render_card_row(card1: tuple, card2: tuple) -> str:
+    """Render two cards side by side with equal heights."""
+    icon1, title1, content1 = card1
+    icon2, title2, content2 = card2
+    
+    return f'''
+    <div class="card-grid">
+        {render_card_html(icon1, title1, content1)}
+        {render_card_html(icon2, title2, content2)}
+    </div>
+    '''
 
-st.markdown("---")
+
+# === HEADER ===
+st.markdown('''
+<div class="app-header">
+    <p class="app-title">Kairo</p>
+    <p class="app-subtitle">Your AI Meeting Prep Agent</p>
+    <p class="app-description">Stop scrambling through CRM, Slack, and docs before client calls. Kairo pulls context from all your data sources and delivers a complete briefing in seconds, so you can walk into every meeting prepared and confident.</p>
+</div>
+''', unsafe_allow_html=True)
 
 # Input section
 col1, col2 = st.columns([2, 1])
@@ -242,26 +405,96 @@ with col2:
         help="What's the meeting about?"
     )
 
+# Agent status component
+def render_agent_status(agents_status: dict) -> str:
+    """Render visual agent status indicator."""
+    html = '<div style="display:flex;gap:12px;flex-wrap:wrap;margin:16px 0;">'
+    
+    agent_config = {
+        "crm": {"name": "CRM Agent", "color": "#3b82f6"},
+        "comms": {"name": "Comms Agent", "color": "#f59e0b"},
+        "docs": {"name": "Docs Agent", "color": "#10b981"},
+        "analytics": {"name": "Analytics Agent", "color": "#8b5cf6"},
+        "orchestrator": {"name": "Orchestrator", "color": "#052FAD"}
+    }
+    
+    for agent_id, config in agent_config.items():
+        status = agents_status.get(agent_id, "pending")
+        if status == "active":
+            bg = config["color"]
+            border = config["color"]
+            icon = '<span style="animation:pulse 1s infinite;">●</span>'
+            opacity = "1"
+        elif status == "done":
+            bg = "#f0fdf4"
+            border = "#22c55e"
+            icon = "✓"
+            opacity = "1"
+        else:
+            bg = "#f8fafc"
+            border = "#e2e8f0"
+            icon = "○"
+            opacity = "0.6"
+        
+        html += f'''<div style="
+            background:{bg};
+            border:2px solid {border};
+            border-radius:8px;
+            padding:8px 14px;
+            font-size:13px;
+            font-weight:500;
+            color:{'white' if status == 'active' else '#475569'};
+            opacity:{opacity};
+            display:flex;
+            align-items:center;
+            gap:6px;
+        ">{icon} {config["name"]}</div>'''
+    
+    html += '</div>'
+    return html
+
+
 # Generate button
-if st.button("🚀 Generate Briefing", type="primary", use_container_width=True):
+if st.button("Generate Briefing", type="primary", use_container_width=True):
     if not client_name.strip():
         st.error("Please enter a client name")
     else:
-        progress_bar = st.progress(0)
-        status_text = st.empty()
-        
-        status_text.text("🔍 Querying CRM...")
-        progress_bar.progress(20)
+        # Progress container
+        progress_container = st.container()
+        with progress_container:
+            progress_bar = st.progress(0)
+            status_text = st.empty()
+            agent_status_container = st.empty()
         
         try:
-            status_text.text("💬 Fetching Slack conversations...")
-            progress_bar.progress(40)
+            # CRM Agent
+            agent_status_container.markdown(render_agent_status({"crm": "active"}), unsafe_allow_html=True)
+            status_text.markdown("**CRM Agent:** Querying client database for account info, stakeholders, and deal status...")
+            progress_bar.progress(15)
+            time.sleep(0.3)
             
-            status_text.text("📄 Parsing documents...")
-            progress_bar.progress(60)
+            # Comms Agent
+            agent_status_container.markdown(render_agent_status({"crm": "done", "comms": "active"}), unsafe_allow_html=True)
+            status_text.markdown("**Comms Agent:** Analyzing Slack conversations for recent context and action items...")
+            progress_bar.progress(35)
+            time.sleep(0.3)
             
-            status_text.text("🤖 Generating briefing with IBM Granite...")
-            progress_bar.progress(80)
+            # Docs Agent
+            agent_status_container.markdown(render_agent_status({"crm": "done", "comms": "done", "docs": "active"}), unsafe_allow_html=True)
+            status_text.markdown("**Docs Agent:** Parsing proposals and meeting notes with Docling...")
+            progress_bar.progress(55)
+            time.sleep(0.3)
+            
+            # Analytics Agent
+            agent_status_container.markdown(render_agent_status({"crm": "done", "comms": "done", "docs": "done", "analytics": "active"}), unsafe_allow_html=True)
+            status_text.markdown("**Analytics Agent:** Analyzing dashboards, charts, and health metrics...")
+            progress_bar.progress(75)
+            time.sleep(0.3)
+            
+            # Orchestrator
+            agent_status_container.markdown(render_agent_status({"crm": "done", "comms": "done", "docs": "done", "analytics": "done", "orchestrator": "active"}), unsafe_allow_html=True)
+            status_text.markdown("**Orchestrator:** Collating agent outputs and generating briefing with IBM Granite...")
+            progress_bar.progress(90)
             
             # Call orchestrator
             response = requests.post(
@@ -272,26 +505,28 @@ if st.button("🚀 Generate Briefing", type="primary", use_container_width=True)
             response.raise_for_status()
             result = response.json()
             
+            # All done
+            agent_status_container.markdown(render_agent_status({"crm": "done", "comms": "done", "docs": "done", "analytics": "done", "orchestrator": "done"}), unsafe_allow_html=True)
             progress_bar.progress(100)
-            status_text.text("✅ Briefing ready!")
+            status_text.markdown("**Briefing ready!**")
             
-            import time
-            time.sleep(0.3)
+            time.sleep(0.5)
             progress_bar.empty()
             status_text.empty()
+            agent_status_container.empty()
             
             # Get structured data
             data = result.get("structured_data", {})
             sources = result.get("sources_used", [])
             gen_time = result.get('generation_time_ms', 0) / 1000
             
-            st.markdown("---")
+            st.markdown("<br>", unsafe_allow_html=True)
             
-            # === HEADER ===
+            # === BRIEFING HEADER ===
             st.markdown(f'''
             <div class="briefing-header">
                 <p class="client-name">{data.get("client_name", client_name)}</p>
-                <p class="meeting-topic">Meeting: {meeting_topic}</p>
+                <p class="meeting-topic">Meeting Topic: {meeting_topic}</p>
             </div>
             ''', unsafe_allow_html=True)
             
@@ -301,103 +536,110 @@ if st.button("🚀 Generate Briefing", type="primary", use_container_width=True)
             
             # Source Legend
             legend_html = '<div class="source-legend">'
-            legend_html += '<span style="color:#64748b;font-weight:500;">Sources:</span>'
+            legend_html += '<span style="color:#475569;font-weight:600;">Sources:</span>'
             for src in sources:
                 cfg = SOURCE_CONFIG.get(src, {"label": src, "icon": "📁", "class": "cite-crm"})
                 legend_html += f'<span class="legend-item"><span class="citation {cfg["class"]}">{cfg["icon"]} {cfg["label"]}</span></span>'
-            legend_html += f'<span class="legend-item" style="margin-left:auto;">Generated in {gen_time:.1f}s</span>'
+            legend_html += f'<span class="legend-item" style="margin-left:auto;"><span class="gen-time">Generated in {gen_time:.1f}s</span></span>'
             legend_html += '</div>'
             st.markdown(legend_html, unsafe_allow_html=True)
             
-            # === CARDS ROW 1 ===
-            col1, col2 = st.columns(2)
+            # === CARDS ROW 1: At a Glance + Key Stakeholders ===
+            deal = data.get("deal", {})
+            health = data.get("health", {})
+            glance_content = f'''
+            <ul>
+                <li><strong>Stage:</strong> {deal.get("stage", "N/A")} {render_citation("crm")}</li>
+                <li><strong>Value:</strong> {deal.get("value", "N/A")} {render_citation("crm")}</li>
+                <li><strong>Close Date:</strong> {deal.get("close_date", "N/A")} {render_citation("crm")}</li>
+                <li><strong>Probability:</strong> {deal.get("probability", "N/A")}% {render_citation("crm")}</li>
+                <li><strong>Health Score:</strong> {health.get("score", "N/A")}/100 {render_citation("analytics")}</li>
+                <li><strong>Competitor:</strong> {deal.get("competitor", "None")} {render_citation("crm")}</li>
+            </ul>
+            '''
             
-            with col1:
-                # At a Glance card
-                deal = data.get("deal", {})
-                health = data.get("health", {})
-                glance_content = f'''
-                <ul>
-                    <li><strong>Stage:</strong> {deal.get("stage", "N/A")} {render_citation("crm")}</li>
-                    <li><strong>Value:</strong> {deal.get("value", "N/A")} {render_citation("crm")}</li>
-                    <li><strong>Close Date:</strong> {deal.get("close_date", "N/A")} {render_citation("crm")}</li>
-                    <li><strong>Probability:</strong> {deal.get("probability", "N/A")}% {render_citation("crm")}</li>
-                    <li><strong>Health Score:</strong> {health.get("score", "N/A")}/100 {render_citation("analytics")}</li>
-                    <li><strong>Competitor:</strong> {deal.get("competitor", "None")} {render_citation("crm")}</li>
-                </ul>
-                '''
-                st.markdown(render_card("📊", "At a Glance", glance_content), unsafe_allow_html=True)
+            stakeholders = data.get("stakeholders", [])
+            stake_items = ""
+            for s in stakeholders[:4]:
+                sentiment_color = {"Champion": "#16a34a", "Supportive": "#2563eb", "Neutral": "#ca8a04", "Detractor": "#dc2626"}.get(s.get("sentiment"), "#64748b")
+                notes = s.get("notes", "")
+                notes_html = f'<br/><span style="color:#64748b;font-size:12px;margin-left:8px;">{notes[:80]}...</span>' if notes else ""
+                stake_items += f'''<li style="margin-bottom:12px;"><strong>{s.get("name", "")}</strong>, {s.get("role", "")} 
+                    <span style="color:{sentiment_color};font-weight:600;">({s.get("sentiment", "")})</span>
+                    {render_citation("crm")}{notes_html}</li>'''
+            stakeholders_content = f"<ul>{stake_items}</ul>"
             
-            with col2:
-                # Key Stakeholders card
-                stakeholders = data.get("stakeholders", [])
-                stake_items = ""
-                for s in stakeholders[:4]:
-                    sentiment_color = {"Champion": "#22c55e", "Supportive": "#3b82f6", "Neutral": "#eab308", "Detractor": "#ef4444"}.get(s.get("sentiment"), "#6b7280")
-                    notes = s.get("notes", "")
-                    notes_html = f'<br/><span style="color:#94a3b8;font-size:12px;margin-left:8px;">{notes[:80]}...</span>' if notes else ""
-                    stake_items += f'''<li style="margin-bottom:10px;"><strong>{s.get("name", "")}</strong> - {s.get("role", "")} 
-                        <span style="color:{sentiment_color};font-weight:600;">({s.get("sentiment", "")})</span>
-                        {render_citation("crm")}{notes_html}</li>'''
-                st.markdown(render_card("👥", "Key Stakeholders", f"<ul>{stake_items}</ul>"), unsafe_allow_html=True)
+            st.markdown(render_card_row(
+                ("📊", "At a Glance", glance_content),
+                ("👥", "Key Stakeholders", stakeholders_content)
+            ), unsafe_allow_html=True)
             
-            # === CARDS ROW 2 ===
-            col3, col4 = st.columns(2)
+            # === CARDS ROW 2: Priority Discussion + Recent Context ===
+            priorities = data.get("priorities", [])
+            priority_items = ""
+            for i, p in enumerate(priorities[:5], 1):
+                src = p.get("source", "crm")
+                priority_items += f'''<li style="margin-bottom:10px;">
+                    <span class="priority-num priority-{i}">{i}</span>
+                    {p.get("topic", "")} {render_citation(src, p.get("detail", ""))}
+                </li>'''
+            priorities_content = f"<ul style='list-style:none;padding-left:0;'>{priority_items}</ul>"
             
-            with col3:
-                # Priority Discussion Topics card
-                priorities = data.get("priorities", [])
-                priority_items = ""
-                for i, p in enumerate(priorities[:5], 1):
-                    src = p.get("source", "crm")
-                    priority_items += f'''<li style="margin-bottom:8px;">
-                        <span class="priority-num priority-{i}">{i}</span>
-                        {p.get("topic", "")} {render_citation(src, p.get("detail", ""))}
+            context_items = data.get("recent_context", [])
+            context_html = ""
+            for c in context_items[:3]:
+                context_html += f'''<li style="margin-bottom:8px;">{c.get("text", "")} {render_citation(c.get("source", "crm"))}</li>'''
+            context_content = f"<ul>{context_html}</ul>"
+            
+            st.markdown(render_card_row(
+                ("🎯", "Priority Discussion Topics", priorities_content),
+                ("💬", "Recent Context", context_content)
+            ), unsafe_allow_html=True)
+            
+            # === CARDS ROW 3: Key Documents + Analytics Insights ===
+            docs = data.get("documents", [])
+            docs_html = ""
+            for d in docs[:3]:
+                docs_html += f'''<li style="margin-bottom:10px;"><strong>{d.get("title", "")}</strong><br/>
+                    <span style="color:#64748b;font-size:12px;">{d.get("summary", "")[:80]}...</span>
+                    {render_citation("docs", d.get("title", ""))}</li>'''
+            docs_content = f"<ul>{docs_html}</ul>"
+            
+            talking = data.get("talking_points", [])
+            charts = data.get("chart_insights", [])
+            analytics_items = ""
+            if charts:
+                for chart in charts[:3]:
+                    title = chart.get("title", "")
+                    insight = chart.get("insight", "")
+                    analytics_items += f'''<li style="margin-bottom:12px;">
+                        <strong>{title}</strong><br/>
+                        <span style="color:#64748b;font-size:13px;">{insight}</span>
+                        {render_citation("analytics")}
                     </li>'''
-                st.markdown(render_card("🎯", "Priority Discussion Topics", f"<ul style='list-style:none;padding-left:0;'>{priority_items}</ul>"), unsafe_allow_html=True)
-            
-            with col4:
-                # Recent Context card
-                context_items = data.get("recent_context", [])
-                context_html = ""
-                for c in context_items[:3]:
-                    context_html += f'''<li>{c.get("text", "")} {render_citation(c.get("source", "crm"))}</li>'''
-                st.markdown(render_card("💬", "Recent Context", f"<ul>{context_html}</ul>"), unsafe_allow_html=True)
-            
-            # === CARDS ROW 3 ===
-            col5, col6 = st.columns(2)
-            
-            with col5:
-                # Key Documents card
-                docs = data.get("documents", [])
-                docs_html = ""
-                for d in docs[:3]:
-                    docs_html += f'''<li><strong>{d.get("title", "")}</strong><br/>
-                        <span style="color:#94a3b8;font-size:12px;">{d.get("summary", "")[:80]}...</span>
-                        {render_citation("docs", d.get("title", ""))}</li>'''
-                st.markdown(render_card("📄", "Key Documents", f"<ul>{docs_html}</ul>"), unsafe_allow_html=True)
-            
-            with col6:
-                # Talking Points card
-                talking = data.get("talking_points", [])
-                talking_html = ""
+            else:
                 for t in talking[:3]:
-                    talking_html += f'''<li>{t.get("point", "")} {render_citation(t.get("source", "crm"))}</li>'''
-                st.markdown(render_card("💡", "Talking Points", f"<ul>{talking_html}</ul>"), unsafe_allow_html=True)
+                    analytics_items += f'''<li>{t.get("point", "")} {render_citation(t.get("source", "analytics"))}</li>'''
+            analytics_content = f"<ul>{analytics_items}</ul>"
+            
+            st.markdown(render_card_row(
+                ("📄", "Key Documents", docs_content),
+                ("📈", "Analytics Insights", analytics_content)
+            ), unsafe_allow_html=True)
             
             # === OPENING SCRIPT (Full Width) ===
             opening = data.get("opening_script", [])
             if opening:
-                script_html = '<div style="font-style:italic;color:#e2e8f0;">'
+                script_html = '<div style="color:#475569;">'
                 for i, line in enumerate(opening[:3]):
-                    script_html += f'''<p style="margin-bottom:12px;padding-left:12px;border-left:3px solid #3b82f6;">
+                    script_html += f'''<p style="margin-bottom:14px;padding:12px 16px;background:#f8fafc;border-radius:8px;border-left:4px solid #2563eb;font-style:italic;">
                         "{line.get('line', '')}" {render_citation(line.get('source', 'crm'))}
                     </p>'''
                 script_html += '</div>'
-                st.markdown(render_card("🎬", "Suggested Opening Script", script_html), unsafe_allow_html=True)
+                st.markdown(render_card_html("🎬", "Suggested Opening Script", script_html), unsafe_allow_html=True)
             
             # === ACTION BUTTONS ===
-            st.markdown("---")
+            st.markdown("<br>", unsafe_allow_html=True)
             bcol1, bcol2, bcol3 = st.columns(3)
             
             with bcol1:
@@ -414,12 +656,17 @@ if st.button("🚀 Generate Briefing", type="primary", use_container_width=True)
         except requests.exceptions.ConnectionError:
             progress_bar.empty()
             status_text.empty()
-            st.error("Could not connect to orchestrator. Make sure services are running.")
+            agent_status_container.empty()
+            st.error("Could not connect to orchestrator. Make sure services are running with: python run_local.py")
         except Exception as e:
             progress_bar.empty()
             status_text.empty()
+            agent_status_container.empty()
             st.error(f"Error: {e}")
 
 # Footer
-st.markdown("---")
-st.caption("Built for Pods, Prompts & Prototypes hackathon | Red Hat + IBM | All processing runs locally via Podman")
+st.markdown('''
+<div class="footer-text">
+    Built for Pods, Prompts & Prototypes Hackathon | Red Hat + IBM | Powered by IBM Granite
+</div>
+''', unsafe_allow_html=True)

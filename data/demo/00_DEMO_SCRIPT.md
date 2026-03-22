@@ -10,6 +10,7 @@
   - `01_CRM_Data.md`
   - `02_Slack_Threads.md`
   - `03_Documents.md`
+  - `04_Analytics_Dashboards.md`
 
 ---
 
@@ -38,7 +39,10 @@
 > "Next, Slack conversations. Notice John requested ROI projections by Thursday, and asked for a TCO comparison to justify us over the competitor. These are still pending."
 
 **[Open `03_Documents.md` - scroll to open items]**
-> "And documents: the proposal with pricing terms, and meeting notes with open action items. The same pattern: ROI deck still not sent."
+> "Documents: the proposal with pricing terms, and meeting notes with open action items."
+
+**[Open `04_Analytics_Dashboards.md` - scroll through]**
+> "And analytics dashboards showing usage trends, health scores, and support metrics. The customer has 85/100 health score, 62% user growth, and zero support tickets. These insights will be analyzed by Docling and surfaced in the briefing."
 
 ---
 
@@ -101,10 +105,11 @@
 ## Demo Files in This Folder
 ```
 data/demo/
-├── 00_DEMO_SCRIPT.md     # This script
-├── 01_CRM_Data.md        # Company, deal, stakeholders, health
-├── 02_Slack_Threads.md   # Conversations with pending items
-└── 03_Documents.md       # Proposal terms, meeting notes, open items
+├── 00_DEMO_SCRIPT.md          # This script
+├── 01_CRM_Data.md             # Company, deal, stakeholders, health
+├── 02_Slack_Threads.md        # Conversations with pending items
+├── 03_Documents.md            # Proposal terms, meeting notes, open items
+└── 04_Analytics_Dashboards.md # Usage trends, health scores, support metrics
 ```
 
 ## Tips

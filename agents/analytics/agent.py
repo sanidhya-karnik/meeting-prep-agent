@@ -1,8 +1,8 @@
 """
 Analytics Agent for PreCall Briefing
 
-Finds and describes analytics charts and dashboards for clients.
-Returns chart images and metadata for multimodal processing.
+Finds and describes analytics charts, dashboards, and KPIs for clients.
+Simulates Docling-based analysis of dashboard screenshots.
 """
 
 import os
@@ -21,7 +21,7 @@ DESCRIPTIONS_FILE = DATA_DIR / "chart_descriptions.json"
 
 class QueryRequest(BaseModel):
     client_name: str
-    include_images: Optional[bool] = False  # Whether to return base64 images
+    include_images: Optional[bool] = False
 
 
 def normalize_name(value: str) -> str:
@@ -29,133 +29,108 @@ def normalize_name(value: str) -> str:
     return "".join(ch for ch in value.lower() if ch.isalnum())
 
 
-def load_chart_descriptions() -> dict:
-    """Load pre-computed chart descriptions."""
+def load_analytics_data() -> dict:
+    """Load analytics data including dashboards and KPIs."""
     if DESCRIPTIONS_FILE.exists():
         with open(DESCRIPTIONS_FILE) as f:
             return json.load(f)
     return {}
 
 
-def find_client_charts(client_name: str) -> list[dict]:
-    """Find chart images matching client name."""
-    client_lower = client_name.lower().replace(" ", "_")
+def find_client_data(client_name: str, data: dict) -> Optional[dict]:
+    """Find analytics data matching client name."""
     client_norm = normalize_name(client_name)
-    charts = []
+    search_words = client_name.lower().split()
     
-    # First check: actual image files
-    for ext in ["*.png", "*.jpg", "*.jpeg"]:
-        for file_path in DATA_DIR.glob(ext):
-            file_norm = normalize_name(file_path.stem)
-            if client_lower in file_path.stem.lower() or client_norm in file_norm:
-                charts.append({
-                    "file_name": file_path.name,
-                    "file_path": str(file_path),
-                    "chart_type": infer_chart_type(file_path.stem)
-                })
+    for key, value in data.items():
+        key_norm = normalize_name(key)
+        if client_norm in key_norm or key_norm in client_norm:
+            return value
+        
+        # Also check account_name field if present
+        if isinstance(value, dict) and "account_name" in value:
+            if client_norm in normalize_name(value["account_name"]):
+                return value
+        
+        # Partial word match
+        if any(word in key.lower() for word in search_words if len(word) > 2):
+            return value
     
-    # Fallback: use descriptions file as source of truth (for demo without actual images)
-    if not charts:
-        descriptions = load_chart_descriptions()
-        for file_name in descriptions.keys():
-            file_norm = normalize_name(file_name)
-            if client_lower in file_name.lower() or client_norm in file_norm:
-                charts.append({
-                    "file_name": file_name,
-                    "file_path": str(DATA_DIR / file_name),
-                    "chart_type": infer_chart_type(file_name)
-                })
-    
-    return charts
-
-
-def infer_chart_type(filename: str) -> str:
-    """Infer chart type from filename."""
-    name_lower = filename.lower()
-    if "usage" in name_lower or "trend" in name_lower:
-        return "usage_trend"
-    elif "health" in name_lower:
-        return "health_score"
-    elif "engagement" in name_lower or "heatmap" in name_lower:
-        return "engagement_heatmap"
-    elif "support" in name_lower or "ticket" in name_lower:
-        return "support_metrics"
-    return "general"
-
-
-def get_chart_image_base64(file_path: str) -> Optional[str]:
-    """Read chart image and return as base64."""
-    try:
-        with open(file_path, "rb") as f:
-            return base64.b64encode(f.read()).decode("utf-8")
-    except Exception:
-        return None
-
-
-def get_chart_description(file_name: str, descriptions: dict) -> str:
-    """Get pre-computed description for a chart."""
-    # Try exact match first
-    if file_name in descriptions:
-        return descriptions[file_name]
-    
-    # Try without extension
-    stem = Path(file_name).stem
-    if stem in descriptions:
-        return descriptions[stem]
-    
-    return "No description available for this chart."
+    return None
 
 
 @app.get("/health")
 async def health():
     """Health check endpoint."""
-    charts = list(DATA_DIR.glob("*.png")) + list(DATA_DIR.glob("*.jpg"))
     return {
         "status": "healthy",
         "data_dir": str(DATA_DIR),
-        "charts_found": len(charts),
         "descriptions_available": DESCRIPTIONS_FILE.exists()
     }
 
 
 @app.post("/query")
 async def query(request: QueryRequest):
-    """Query for analytics charts related to a client."""
-    charts = find_client_charts(request.client_name)
+    """Query for analytics data related to a client."""
+    all_data = load_analytics_data()
+    client_data = find_client_data(request.client_name, all_data)
     
-    if not charts:
-        return {"error": f"No analytics charts found for '{request.client_name}'"}
+    if not client_data:
+        return {"error": f"No analytics data found for '{request.client_name}'"}
     
-    # Load descriptions
-    descriptions = load_chart_descriptions()
-    
-    # Build response
+    # Build response with charts and insights
     result = {
+        "account_name": client_data.get("account_name", request.client_name),
+        "dashboards": [],
         "charts": [],
+        "chart_insights": [],
+        "kpi_summary": client_data.get("kpi_summary", {}),
         "summary": ""
     }
     
-    summaries = []
-    
-    for chart in charts:
-        chart_info = {
-            "file_name": chart["file_name"],
-            "chart_type": chart["chart_type"],
-            "description": get_chart_description(chart["file_name"], descriptions)
+    # Process dashboards and extract chart information
+    for dashboard in client_data.get("dashboards", []):
+        dashboard_info = {
+            "name": dashboard.get("name"),
+            "file": dashboard.get("file"),
+            "last_updated": dashboard.get("last_updated")
         }
+        result["dashboards"].append(dashboard_info)
         
-        # Optionally include base64 image for multimodal processing
-        if request.include_images:
-            img_base64 = get_chart_image_base64(chart["file_path"])
-            if img_base64:
-                chart_info["image_base64"] = img_base64
-                chart_info["mime_type"] = "image/png"
-        
-        result["charts"].append(chart_info)
-        summaries.append(chart_info["description"])
+        # Process charts within dashboard
+        for chart in dashboard.get("charts", []):
+            chart_info = {
+                "chart_type": chart.get("chart_type"),
+                "title": chart.get("title"),
+                "description": chart.get("description"),
+                "insight": chart.get("insight"),
+                "data_summary": chart.get("data_summary", ""),
+                "value": chart.get("value"),
+                "status": chart.get("status")
+            }
+            result["charts"].append(chart_info)
+            
+            # Extract key insights for UI display
+            if chart.get("insight"):
+                result["chart_insights"].append({
+                    "title": chart.get("title"),
+                    "insight": chart.get("insight"),
+                    "chart_type": chart.get("chart_type")
+                })
     
-    # Create overall summary
-    result["summary"] = " ".join(summaries[:3])  # First 3 descriptions
+    # Build summary from KPI data
+    kpi = client_data.get("kpi_summary", {})
+    if kpi:
+        result["summary"] = kpi.get("key_insight", "")
+        
+        # Also include health metrics for backward compatibility
+        result["health_metrics"] = {
+            "engagement_score": kpi.get("engagement_score"),
+            "nps_score": kpi.get("nps_score"),
+            "support_tickets_open": kpi.get("support_tickets_open"),
+            "usage_trend": kpi.get("usage_trend"),
+            "risk_level": kpi.get("risk_level")
+        }
     
     return result
 

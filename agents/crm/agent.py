@@ -62,12 +62,20 @@ def load_client_data_json(client_name: str) -> dict:
     if key in data:
         return data[key]
     
-    # Try normalized match
+    # Try normalized match (flexible: either direction contains)
     for k, v in data.items():
-        if normalize_name(k) == client_norm or client_norm in normalize_name(k):
+        k_norm = normalize_name(k)
+        if k_norm == client_norm or client_norm in k_norm or k_norm in client_norm:
             return v
     
-    return {"error": f"Client '{client_name}' not found in CRM"}
+    # Try partial word match (e.g., "acme" matches "acme corp")
+    search_words = client_name.lower().split()
+    for k, v in data.items():
+        k_lower = k.lower()
+        if any(word in k_lower for word in search_words if len(word) > 2):
+            return v
+    
+    return {"error": f"Client '{client_name}' not found in CRM. Available: {list(data.keys())}"}
 
 
 # ============================================================================

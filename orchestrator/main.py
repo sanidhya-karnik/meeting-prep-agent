@@ -158,6 +158,7 @@ def build_structured_data(
         "recent_context": [],
         "documents": [],
         "talking_points": [],
+        "chart_insights": [],
         "opening_script": []
     }
     
@@ -251,13 +252,33 @@ def build_structured_data(
     
     # === Analytics ===
     if "error" not in analytics_data:
+        # Add chart insights for UI display
+        if "chart_insights" in analytics_data:
+            for insight in analytics_data["chart_insights"][:3]:
+                structured["chart_insights"].append({
+                    "title": insight.get("title", ""),
+                    "insight": insight.get("insight", ""),
+                    "chart_type": insight.get("chart_type", "")
+                })
+        
+        # Add chart descriptions as talking points
         if "charts" in analytics_data:
             for chart in analytics_data["charts"][:2]:
-                # Add chart insights as talking points
-                structured["talking_points"].append({
-                    "point": chart.get("description", "")[:80],
-                    "source": "analytics"
-                })
+                if chart.get("insight"):
+                    structured["talking_points"].append({
+                        "point": chart.get("insight", "")[:100],
+                        "source": "analytics"
+                    })
+        
+        # Use analytics health metrics if CRM doesn't have them
+        if "health_metrics" in analytics_data and not structured["health"].get("score"):
+            h = analytics_data["health_metrics"]
+            structured["health"] = {
+                "score": h.get("engagement_score", "N/A"),
+                "risk": h.get("risk_level", "Unknown"),
+                "trend": h.get("usage_trend", "stable"),
+                "tickets": h.get("support_tickets_open", 0)
+            }
     
     # === Build Priority List (dedupe and limit) ===
     # Move CRM next_steps to priorities

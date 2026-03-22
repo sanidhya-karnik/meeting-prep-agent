@@ -1,19 +1,138 @@
 {
-  "acme_usage_trend.png": "Platform usage shows strong growth over the past 6 months. Active users increased from 320 to 520 (+62.5% growth). Sessions grew proportionally from 4,200 to 7,100 per month. The trend is consistently upward with no dips, indicating healthy adoption and engagement.",
-
-  "acme_health_score.png": "Account health score is 85/100 (green zone). This indicates a healthy, engaged customer with low churn risk. The score reflects strong product usage, positive support interactions, and regular engagement with the platform.",
-
-  "acme_engagement_heatmap.png": "Feature engagement analysis shows Dashboard (95%) and Reports (88%) are the most-used features. Analytics usage is growing rapidly (45% to 70% over 4 weeks), suggesting increased data-driven decision making. Integrations (48%) and Admin (30%) have lower but stable usage. Key insight: The Analytics feature shows the strongest week-over-week growth.",
-
-  "acme_support_metrics.png": "Support metrics are excellent. Zero open tickets currently. Ticket volume has decreased from 8 in January to just 2 in March. Average first response time is 1.5 hours (SLA: 2 hours). Average resolution time is 4.2 hours (SLA: 8 hours). All metrics are well within SLA targets, indicating a satisfied customer with minimal support needs.",
-
-  "globex_usage_trend.png": "Usage for Globex pilot cohorts is stable-to-growing. Weekly active users increased from 38 to 52 across two warehouse sites after onboarding improvements. Session consistency is strong and supports expansion readiness for Q3 if KPI targets remain on track.",
-
-  "globex_health_score.png": "Globex account health score is 72/100 (watch zone). Customer engagement is good, but expansion confidence depends on pilot KPI attainment and security sign-off. Current risk level is medium with upside if pilot milestones are delivered on time.",
-
-  "globex_support_metrics.png": "Support performance is healthy for pilot scale. One low-priority open ticket, first response time at 1.8 hours, and average resolution at 5.1 hours. SLA adherence remains on target, with no blocker-level incidents.",
-
-  "opp-acme-0001_kpi_snapshot.png": "Opportunity OPP-ACME-0001 KPI snapshot: engagement trend up, executive scrutiny high due to CFO involvement, and primary risk is unresolved ROI/TCO narrative versus competitor pricing.",
-
-  "opp-globex-0001_kpi_snapshot.png": "Opportunity OPP-GLOBEX-0001 KPI snapshot: pilot scope is defined, expansion potential is strong, and key risk is security/legal alignment before steering committee review."
+  "acme_corp": {
+    "account_name": "Acme Corp",
+    "dashboards": [
+      {
+        "name": "Account Health Dashboard",
+        "file": "acme_health_dashboard.png",
+        "last_updated": "2026-03-20",
+        "charts": [
+          {
+            "chart_type": "health_score_gauge",
+            "title": "Account Health Score",
+            "value": 85,
+            "max_value": 100,
+            "status": "healthy",
+            "description": "Account health score is 85/100, indicating a healthy and engaged customer with low churn risk.",
+            "insight": "Strong engagement metrics and positive support history. Customer is in the green zone with expansion potential."
+          },
+          {
+            "chart_type": "usage_trend_line",
+            "title": "Platform Usage Trend (6 Months)",
+            "data_summary": "Active users grew from 320 to 520 (+62.5%)",
+            "description": "Consistent upward trend in platform adoption with no significant dips.",
+            "insight": "Usage momentum is strong. 62% growth in active users over 6 months suggests high product-market fit. Good signal for upsell conversations."
+          }
+        ]
+      },
+      {
+        "name": "Engagement Analytics",
+        "file": "acme_engagement_analytics.png",
+        "last_updated": "2026-03-19",
+        "charts": [
+          {
+            "chart_type": "feature_heatmap",
+            "title": "Feature Engagement Heatmap",
+            "top_features": ["Dashboard (95%)", "Reports (88%)", "Analytics (70%)"],
+            "description": "Dashboard and Reports are most-used features. Analytics usage growing rapidly from 45% to 70% over 4 weeks.",
+            "insight": "Analytics feature shows strongest growth. Customer is becoming more data-driven. Consider highlighting advanced analytics capabilities in the call."
+          },
+          {
+            "chart_type": "session_distribution",
+            "title": "Session Distribution by Department",
+            "data_summary": "Engineering: 45%, Operations: 30%, Finance: 15%, Other: 10%",
+            "description": "Engineering team is the primary user base, followed by Operations.",
+            "insight": "Engineering adoption is strong (John Smith's team). Finance usage at 15% suggests Lisa Park's team is starting to engage. Good opportunity to expand Finance use cases."
+          }
+        ]
+      },
+      {
+        "name": "Support Performance",
+        "file": "acme_support_metrics.png",
+        "last_updated": "2026-03-20",
+        "charts": [
+          {
+            "chart_type": "ticket_trend",
+            "title": "Support Ticket Trend",
+            "current_open": 0,
+            "monthly_trend": "8 → 5 → 2 (Jan → Feb → Mar)",
+            "description": "Ticket volume decreased 75% over 3 months. Zero open tickets currently.",
+            "insight": "Excellent support health. Declining ticket volume indicates product stability and customer proficiency. Use this as proof point for CFO."
+          },
+          {
+            "chart_type": "sla_compliance",
+            "title": "SLA Compliance",
+            "first_response": "1.5 hrs (SLA: 2 hrs)",
+            "resolution_time": "4.2 hrs (SLA: 8 hrs)",
+            "compliance_rate": "100%",
+            "description": "All support metrics well within SLA targets.",
+            "insight": "100% SLA compliance demonstrates operational excellence. Strong proof point for enterprise readiness."
+          }
+        ]
+      }
+    ],
+    "kpi_summary": {
+      "engagement_score": 85,
+      "nps_score": 42,
+      "support_tickets_open": 0,
+      "usage_trend": "up",
+      "risk_level": "low",
+      "expansion_potential": "high",
+      "key_insight": "Customer shows strong product adoption with 62% user growth. Zero support tickets and 100% SLA compliance. Analytics feature adoption is accelerating, suggesting readiness for advanced tier discussion."
+    }
+  },
+  "globex_industries": {
+    "account_name": "Globex Industries",
+    "dashboards": [
+      {
+        "name": "Pilot Performance Dashboard",
+        "file": "globex_pilot_dashboard.png",
+        "last_updated": "2026-03-21",
+        "charts": [
+          {
+            "chart_type": "health_score_gauge",
+            "title": "Account Health Score",
+            "value": 72,
+            "max_value": 100,
+            "status": "watch",
+            "description": "Account health score is 72/100, in the watch zone pending pilot KPI attainment.",
+            "insight": "Health score is moderate. Expansion depends on pilot success metrics and security sign-off."
+          },
+          {
+            "chart_type": "pilot_adoption_curve",
+            "title": "Pilot Adoption (2 Warehouses)",
+            "data_summary": "Weekly active users: 38 → 52 (+37%)",
+            "description": "Adoption growing steadily across both pilot warehouse sites.",
+            "insight": "37% growth in pilot users after onboarding improvements. On track for Q3 expansion if KPIs hold."
+          }
+        ]
+      },
+      {
+        "name": "Support Metrics",
+        "file": "globex_support_metrics.png",
+        "last_updated": "2026-03-20",
+        "charts": [
+          {
+            "chart_type": "ticket_summary",
+            "title": "Support Ticket Summary",
+            "current_open": 1,
+            "priority": "low",
+            "first_response": "1.8 hrs",
+            "resolution_time": "5.1 hrs",
+            "description": "One low-priority open ticket. SLA adherence on target.",
+            "insight": "Support health is good for pilot scale. No blocker-level incidents."
+          }
+        ]
+      }
+    ],
+    "kpi_summary": {
+      "engagement_score": 72,
+      "nps_score": null,
+      "support_tickets_open": 1,
+      "usage_trend": "stable",
+      "risk_level": "medium",
+      "expansion_potential": "medium",
+      "key_insight": "Pilot showing positive adoption trajectory. Security and legal alignment needed before steering committee. Expansion potential for Q3 if pilot KPIs are met."
+    }
+  }
 }
