@@ -1,0 +1,27 @@
+# Google Calendar API
+google-api-python-client>=2.100.0
+google-auth-httplib2>=0.1.1
+google-auth-oauthlib>=1.1.0
+
+# External Research
+tavily-python>=0.3.0
+
+# Database (optional - for internal search)
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.9
+
+# Data Validation
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# Scheduling
+apscheduler>=3.10.4
+
+# Environment
+python-dotenv>=1.0.0
+
+# Utilities
+python-dateutil>=2.8.2
+
+# Logging
+structlog>=23.2.0

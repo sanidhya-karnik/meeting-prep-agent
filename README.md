@@ -245,6 +245,30 @@ Replace mock data with actual API calls:
 
 ---
 
+## Production Version (Kairo)
+
+The `product/` directory contains **Kairo**, a production-ready version that:
+
+- **Integrates with Google Calendar** - automatically monitors for upcoming meetings
+- **Creates prep tasks** - 30 min before each meeting with full briefing
+- **Works on mobile** - briefing is in the task description, no external links needed
+- **Uses Tavily** for real-time web research (LinkedIn profiles, company news)
+
+### Quick Start
+
+```bash
+cd product
+pip install -r requirements.txt
+cp .env.example .env
+# Add your TAVILY_API_KEY to .env
+# Add credentials.json from Google Cloud Console
+python main.py
+```
+
+See [product/README.md](product/README.md) for full setup instructions.
+
+---
+
 ## License
 
 MIT - Built for the Pods, Prompts & Prototypes hackathon.
